@@ -18,10 +18,20 @@
 
         <script>
             "use strict";
-
+            // 获取url上bookSource参数
+            function getQueryString(name) {
+              var reg = new RegExp("(^|&)" + name + "=([^&]*)(#|&|$)", "i");
+              var r = decodeURI(window.location.search).substr(1).match(reg);
+              if (r != null) return unescape(r[2]); return null;
+            }
+            var bookSource = getQueryString("bookSource");
             document.onreadystatechange = function () {
+              if(!bookSource) {
+                alert("请传入bookSource参数");
+                return;
+              }
               if (document.readyState == "complete") {
-                window.reader = ePubReader("https://s3.amazonaws.com/moby-dick/", {
+                window.reader = ePubReader(encodeURI(`${bookSource}`), {
                    restore: true
                  });
               }
